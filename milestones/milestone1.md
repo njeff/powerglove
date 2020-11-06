@@ -1,5 +1,8 @@
 # Milestone 1
 
+## Git Repo
+https://github.com/njeff/powerglove
+
 ## Architecture Drawing
 
 ![Architecture Drawing](../img/architecture.png)
