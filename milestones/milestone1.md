@@ -4,6 +4,10 @@
 
 ![Architecture Drawing](../img/architecture.png)
 
+## Conceptual Sketch
+
+![Sketch](../img/sketch1.jpg)
+
 ## Sensors
 
 Ideally, the sensors are small, simple devices that can easily be integrated into the user's hand. 
