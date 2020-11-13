@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:powerglove_pcb-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -14,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L powerglove_library:DRV2605 U1
+L powerglove_pcb-rescue:DRV2605-powerglove_library U1
 U 1 1 5FA9BF1E
 P 5400 3400
 F 0 "U1" H 5700 2950 50  0000 C CNN
@@ -671,4 +672,58 @@ Text Notes 1950 3100 0    50   ~ 0
 To Buckler (jumpers)\n
 Text Notes 1950 2250 0    50   ~ 0
 From Battery (2S Lipo)
+$Comp
+L Connector_Generic:Conn_01x07 J8
+U 1 1 5FAEEE70
+P 2450 6150
+F 0 "J8" H 2368 5625 50  0000 C CNN
+F 1 "Conn_01x07" H 2368 5716 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical" H 2450 6150 50  0001 C CNN
+F 3 "~" H 2450 6150 50  0001 C CNN
+	1    2450 6150
+	-1   0    0    1   
+$EndComp
+Text Notes 2300 5500 0    50   ~ 0
+ToF Sensor
+Wire Wire Line
+	2650 6150 2900 6150
+Wire Wire Line
+	2650 6250 2900 6250
+Text Label 2900 6250 0    50   ~ 0
+SCL
+Text Label 2900 6150 0    50   ~ 0
+SDA
+Wire Wire Line
+	3150 6050 3150 6100
+Wire Wire Line
+	2650 6050 3150 6050
+$Comp
+L power:GND #PWR024
+U 1 1 5FAF6B54
+P 3150 6100
+F 0 "#PWR024" H 3150 5850 50  0001 C CNN
+F 1 "GND" H 3155 5927 50  0000 C CNN
+F 2 "" H 3150 6100 50  0001 C CNN
+F 3 "" H 3150 6100 50  0001 C CNN
+	1    3150 6100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR023
+U 1 1 5FAF9080
+P 3150 5900
+F 0 "#PWR023" H 3150 5750 50  0001 C CNN
+F 1 "+3V3" H 3165 6073 50  0000 C CNN
+F 2 "" H 3150 5900 50  0001 C CNN
+F 3 "" H 3150 5900 50  0001 C CNN
+	1    3150 5900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 5950 3150 5900
+Wire Wire Line
+	2650 5950 3150 5950
+NoConn ~ 2650 6450
+NoConn ~ 2650 6350
+NoConn ~ 2650 5850
 $EndSCHEMATC
