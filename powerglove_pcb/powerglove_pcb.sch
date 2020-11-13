@@ -15,17 +15,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L powerglove_pcb-rescue:DRV2605-powerglove_library U1
-U 1 1 5FA9BF1E
-P 5400 3400
-F 0 "U1" H 5700 2950 50  0000 C CNN
-F 1 "DRV2605" H 5800 2850 50  0000 C CNN
-F 2 "Package_SO:VSSOP-10_3x3mm_P0.5mm" H 5400 3400 50  0001 C CNN
-F 3 "" H 5400 3400 50  0001 C CNN
-	1    5400 3400
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C2
 U 1 1 5FA9D475
 P 4900 2700
@@ -235,9 +224,9 @@ Text Label 2900 3600 0    50   ~ 0
 SDA
 Text Label 2900 3700 0    50   ~ 0
 INT
-Text Label 2900 3800 0    50   ~ 0
-SERVO1
 Text Label 2900 3900 0    50   ~ 0
+SERVO1
+Text Label 2900 3800 0    50   ~ 0
 SERVO2
 Wire Wire Line
 	2900 3800 2650 3800
@@ -672,17 +661,6 @@ Text Notes 1950 3100 0    50   ~ 0
 To Buckler (jumpers)\n
 Text Notes 1950 2250 0    50   ~ 0
 From Battery (2S Lipo)
-$Comp
-L Connector_Generic:Conn_01x07 J8
-U 1 1 5FAEEE70
-P 2450 6150
-F 0 "J8" H 2368 5625 50  0000 C CNN
-F 1 "Conn_01x07" H 2368 5716 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical" H 2450 6150 50  0001 C CNN
-F 3 "~" H 2450 6150 50  0001 C CNN
-	1    2450 6150
-	-1   0    0    1   
-$EndComp
 Text Notes 2300 5500 0    50   ~ 0
 ToF Sensor
 Wire Wire Line
@@ -723,7 +701,26 @@ Wire Wire Line
 	3150 5950 3150 5900
 Wire Wire Line
 	2650 5950 3150 5950
-NoConn ~ 2650 6450
-NoConn ~ 2650 6350
-NoConn ~ 2650 5850
+$Comp
+L Connector_Generic:Conn_01x04 J8
+U 1 1 5FAF6479
+P 2450 6150
+F 0 "J8" H 2368 5725 50  0000 C CNN
+F 1 "Conn_01x04" H 2368 5816 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 2450 6150 50  0001 C CNN
+F 3 "~" H 2450 6150 50  0001 C CNN
+	1    2450 6150
+	-1   0    0    1   
+$EndComp
+$Comp
+L powerglove_library:DRV2605 U1
+U 1 1 5FB13902
+P 5400 3400
+F 0 "U1" H 5750 2950 50  0000 C CNN
+F 1 "DRV2605" H 5850 2850 50  0000 C CNN
+F 2 "Package_SO:VSSOP-10_3x3mm_P0.5mm" H 5400 3400 50  0001 C CNN
+F 3 "https://www.ti.com/lit/ds/symlink/drv2605l.pdf" H 5400 3400 50  0001 C CNN
+	1    5400 3400
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
