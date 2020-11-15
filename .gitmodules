@@ -1,0 +1,3 @@
+[submodule "fw/buckler"]
+	path = fw/buckler
+	url = https://github.com/lab11/buckler.git
