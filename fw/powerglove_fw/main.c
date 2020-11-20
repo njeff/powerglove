@@ -17,9 +17,12 @@
 #include "nrf_serial.h"
 #include "nrf_drv_spi.h"
 #include "display.h"
+#include "app_timer.h"
 
 #include "buckler.h"
 #include "drv2605l.h"
+#include "vl53l0x.h"
+#include "millis.h"
 #include "states.h"
 
 // LED array
@@ -32,6 +35,9 @@ glove_state_t state;
 
 int main(void) {
   ret_code_t error_code = NRF_SUCCESS;
+
+  // initialize timer, necessary for the ToF sensor
+  millisInit();
 
   // initialize i2c master (two wire interface)
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
@@ -73,10 +79,9 @@ int main(void) {
     APP_ERROR_CHECK(error_code);
   }
 
-  //initDRV2605(&twi_mngr_instance);
-
   // try haptic
   /*
+  initDRV2605(&twi_mngr_instance);
   DRV2605_setWaveform(0, 10);
   DRV2605_setWaveform(1, 0);
   DRV2605_go();
@@ -88,14 +93,24 @@ int main(void) {
   nrf_delay_ms(500);
   */
 
+  // try ToF
+  
+  //VL53L0X_init(true, &twi_mngr_instance);
+  //VL53L0X_startContinuous(100);
+  //VL53L0X_readRangeContinuousMillimeters();
+  
+
   // loop forever
   state = OFF;
   pStateFunc = state_map[state];
   state_data_t state_info;
 
+  char buf[16];
   while (1) {
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
+    sprintf(buf, "%lu", millis());
+    display_write(buf, DISPLAY_LINE_0);
   }
 }
 

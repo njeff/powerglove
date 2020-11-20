@@ -8,8 +8,11 @@ SOFTDEVICE_MODEL = s132
 
 # Source and header files
 APP_HEADER_PATHS += .
+APP_HEADER_PATHS += drivers/
 APP_SOURCE_PATHS += .
+APP_SOURCE_PATHS += drivers/
 APP_SOURCES = $(notdir $(wildcard ./*.c))
+APP_SOURCES += $(notdir $(wildcard ./drivers/*.c))
 
 # Path to base of nRF52-base repo
 NRF_BASE_DIR = ../buckler/software/nrf52x-base/
