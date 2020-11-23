@@ -23,6 +23,7 @@
 #include "drv2605l.h"
 #include "vl53l0x.h"
 #include "millis.h"
+#include "util.h"
 #include "states.h"
 
 // LED array
@@ -38,6 +39,10 @@ int main(void) {
 
   // initialize timer, necessary for the ToF sensor
   millisInit();
+
+  // initialize servo
+  servoInit();
+  setServoAngle(0, 90);
 
   // initialize i2c master (two wire interface)
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
@@ -79,25 +84,12 @@ int main(void) {
     APP_ERROR_CHECK(error_code);
   }
 
-  // try haptic
-  /*
+  // init haptic
   initDRV2605(&twi_mngr_instance);
-  DRV2605_setWaveform(0, 10);
-  DRV2605_setWaveform(1, 0);
-  DRV2605_go();
-  nrf_delay_ms(500);
-
-  DRV2605_setWaveform(0, 30);
-  DRV2605_setWaveform(1, 0);
-  DRV2605_go();
-  nrf_delay_ms(500);
-  */
 
   // try ToF
-  
-  //VL53L0X_init(true, &twi_mngr_instance);
-  //VL53L0X_startContinuous(100);
-  //VL53L0X_readRangeContinuousMillimeters();
+  VL53L0X_init(true, &twi_mngr_instance);
+  VL53L0X_startContinuous(100);
   
 
   // loop forever
@@ -107,10 +99,16 @@ int main(void) {
 
   char buf[16];
   while (1) {
+    state_info.dist = VL53L0X_readRangeContinuousMillimeters();
+    
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
-    sprintf(buf, "%lu", millis());
+
+    sprintf(buf, "dist: %d", state_info.dist);
     display_write(buf, DISPLAY_LINE_0);
+    sprintf(buf, "ms: %lu", millis());
+    display_write(buf, DISPLAY_LINE_1);
+    nrf_delay_ms(100);
   }
 }
 

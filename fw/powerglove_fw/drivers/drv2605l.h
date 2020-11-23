@@ -23,6 +23,8 @@
 #ifndef DRV2605_H
 #define DRV2605_H
 
+#include "nrf_twi_mngr.h"
+
 #define DRV2605_ADDR 0x5A ///< Device I2C address
 
 #define DRV2605_REG_STATUS 0x00       ///< Status register

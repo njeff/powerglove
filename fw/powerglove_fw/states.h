@@ -9,7 +9,7 @@ typedef enum {
 } glove_state_t;
 
 typedef struct s_data {
-  int d;
+  int dist;
 } state_data_t;
 
 glove_state_t off_state(state_data_t *state_data);
