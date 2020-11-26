@@ -10,6 +10,7 @@ typedef enum {
 
 typedef struct s_data {
   int dist;
+  float voltage;
 } state_data_t;
 
 glove_state_t off_state(state_data_t *state_data);

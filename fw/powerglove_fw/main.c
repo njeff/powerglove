@@ -44,6 +44,9 @@ int main(void) {
   servoInit();
   setServoAngle(0, 90);
 
+  // initialize battery reading
+  batteryInit();
+
   // initialize i2c master (two wire interface)
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
   i2c_config.scl = BUCKLER_SENSORS_SCL;
@@ -68,7 +71,7 @@ int main(void) {
   error_code = nrf_drv_spi_init(&spi_instance, &spi_config, NULL, NULL);
   APP_ERROR_CHECK(error_code);
   display_init(&spi_instance);
-  display_write("Hello, Human!", DISPLAY_LINE_0);
+  //display_write("Hello, Human!", DISPLAY_LINE_0);
 
   // initialize GPIO driver
   if (!nrfx_gpiote_is_init()) {
@@ -100,11 +103,12 @@ int main(void) {
   char buf[16];
   while (1) {
     state_info.dist = VL53L0X_readRangeContinuousMillimeters();
+    state_info.voltage = readBattery();
     
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    sprintf(buf, "dist: %d", state_info.dist);
+    sprintf(buf, "d:%d, b:%3.2f", state_info.dist, state_info.voltage);
     display_write(buf, DISPLAY_LINE_0);
     sprintf(buf, "ms: %lu", millis());
     display_write(buf, DISPLAY_LINE_1);
