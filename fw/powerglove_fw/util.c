@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "util.h"
 #include "nrf_gpio.h"
 #include "nrf.h"
 #include "nrf_drv_pwm.h"
 #include "nrfx_saadc.h"
+
+#include "millis.h"
+#include "buckler.h"
 
 static nrf_drv_pwm_t m_pwm0 = NRF_DRV_PWM_INSTANCE(0);
 
@@ -112,4 +116,31 @@ float readServoFB() {
   
   // 3x for the voltage divider
   return 3.6 * val / (1 << 12);
+}
+
+void buttonInit() {
+   nrf_gpio_cfg(BUCKLER_BUTTON0, NRF_GPIO_PIN_DIR_INPUT, 
+                NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_NOPULL,
+                NRF_GPIO_PIN_S0S1, NRF_GPIO_PIN_NOSENSE);
+}
+
+static uint32_t last_press_time = 0;
+static bool down = false;
+
+bool readButton() {
+  // returns true if the button was pressed on this cycle
+  // if held down, will return false on next cycles
+  // implements debouncing
+  if (compareMillis(last_press_time, millis()) > 100) {
+    if (!nrf_gpio_pin_read(BUCKLER_BUTTON0)) {
+      if (!down) {
+        last_press_time = millis();
+        down = true;
+        return true;
+      }
+    } else {
+      down = false;
+    }
+  }
+  return false;
 }

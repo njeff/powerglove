@@ -47,6 +47,8 @@ int main(void) {
   // initialize ADC reading for battery and servo FB
   adcInit();
 
+  buttonInit();
+
   // initialize i2c master (two wire interface)
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
   i2c_config.scl = BUCKLER_SENSORS_SCL;
@@ -102,14 +104,16 @@ int main(void) {
 
   char buf[16];
   while (1) {
+    // update all state variables
     state_info.dist = VL53L0X_readRangeContinuousMillimeters();
     state_info.voltage = readBattery();
+    state_info.pressed = readButton();
     
+    // do state functions
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    sprintf(buf, "d:%d, b:%2.1f", state_info.dist, state_info.voltage);
-    display_write(buf, DISPLAY_LINE_0);
+    // debug prints
     sprintf(buf, "ms: %lu, %2.1f", millis(), readServoFB());
     display_write(buf, DISPLAY_LINE_1);
     nrf_delay_ms(100);

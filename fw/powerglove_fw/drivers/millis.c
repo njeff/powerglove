@@ -4,7 +4,9 @@
 #include "nrf_drv_clock.h"
 
 APP_TIMER_DEF(millis_timer_id);
-#define APP_TIMER_CONFIG_RTC_FREQUENCY 31
+
+// How to configure timer to run at 1024Hz?
+//#define APP_TIMER_CONFIG_RTC_FREQUENCY 31
 
 static void lfclk_request(void)
 {
@@ -33,8 +35,8 @@ uint32_t millis(void)
   return(app_timer_cnt_get() / 32.768);
 }
 
-//uint32_t compareMillis(uint32_t previousMillis, uint32_t currentMillis)
-//{
-//  if(currentMillis < previousMillis) return(currentMillis + OVERFLOW + 1 - previousMillis);
-//  return(currentMillis - previousMillis);
-//}
+uint32_t compareMillis(uint32_t previousMillis, uint32_t currentMillis)
+{
+  if(currentMillis < previousMillis) return(currentMillis + OVERFLOW + 1 - previousMillis);
+  return(currentMillis - previousMillis);
+}

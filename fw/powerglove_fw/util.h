@@ -14,5 +14,7 @@ void setServoAngle(uint8_t servo_number, uint8_t v);
 void adcInit();
 float readBattery();
 float readServoFB();
+void buttonInit();
+bool readButton();
 
 #endif
