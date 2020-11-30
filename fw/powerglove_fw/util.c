@@ -63,7 +63,7 @@ void saadc_callback (nrfx_saadc_evt_t const * p_event) {
   // don't care about adc callbacks
 }
 
-void batteryInit() {
+void adcInit() {
   uint32_t error_code;
   // initialize analog to digital converter
   nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
@@ -73,6 +73,7 @@ void batteryInit() {
 
   // initialize analog inputs
   // configure with 0 as input pin for now
+  // Battery voltage reading pin
   nrf_saadc_channel_config_t channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(0);
   channel_config.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
   channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
@@ -80,6 +81,16 @@ void batteryInit() {
   // specify input pin and initialize that ADC channel
   channel_config.pin_p = BATTERY_PIN;
   error_code = nrfx_saadc_channel_init(BATTERY_CHANNEL, &channel_config);
+  APP_ERROR_CHECK(error_code);
+
+  // Servo FB reading pin
+  nrf_saadc_channel_config_t channel_config2 = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(1);
+  channel_config2.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
+  channel_config2.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
+
+  // specify input pin and initialize that ADC channel
+  channel_config2.pin_p = SERVO_FB_PIN;
+  error_code = nrfx_saadc_channel_init(SERVO_FB_CHANNEL, &channel_config2);
   APP_ERROR_CHECK(error_code);
 }
 
@@ -91,4 +102,14 @@ float readBattery() {
   
   // 3x for the voltage divider
   return 3 * 3.6 * val / (1 << 12);
+}
+
+float readServoFB() {
+  // returns the voltage of the servo FB pin
+  nrf_saadc_value_t val;
+  ret_code_t error_code = nrfx_saadc_sample_convert(SERVO_FB_CHANNEL, &val);
+  APP_ERROR_CHECK(error_code);
+  
+  // 3x for the voltage divider
+  return 3.6 * val / (1 << 12);
 }

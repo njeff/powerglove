@@ -44,8 +44,8 @@ int main(void) {
   servoInit();
   setServoAngle(0, 90);
 
-  // initialize battery reading
-  batteryInit();
+  // initialize ADC reading for battery and servo FB
+  adcInit();
 
   // initialize i2c master (two wire interface)
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
@@ -108,9 +108,9 @@ int main(void) {
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    sprintf(buf, "d:%d, b:%3.2f", state_info.dist, state_info.voltage);
+    sprintf(buf, "d:%d, b:%2.1f", state_info.dist, state_info.voltage);
     display_write(buf, DISPLAY_LINE_0);
-    sprintf(buf, "ms: %lu", millis());
+    sprintf(buf, "ms: %lu, %2.1f", millis(), readServoFB());
     display_write(buf, DISPLAY_LINE_1);
     nrf_delay_ms(100);
   }
