@@ -10,7 +10,8 @@
 #define SERVO_FB_CHANNEL 1
 
 void servoInit();
-void setServoAngle(uint8_t servo_number, uint8_t v);
+void setServoAngle(uint8_t servo_number, int16_t v);
+uint8_t fbVoltToAngle(float voltage);
 void adcInit();
 float readBattery();
 float readServoFB();

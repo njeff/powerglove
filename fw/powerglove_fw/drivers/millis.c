@@ -6,6 +6,7 @@
 APP_TIMER_DEF(millis_timer_id);
 
 // How to configure timer to run at 1024Hz?
+// Current millis will overflow at around 8 minutes.
 //#define APP_TIMER_CONFIG_RTC_FREQUENCY 31
 
 static void lfclk_request(void)

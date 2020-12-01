@@ -49,17 +49,41 @@ void servoInit() {
   nrf_drv_pwm_simple_playback(&m_pwm0, &seq, 1, NRF_DRV_PWM_FLAG_LOOP);
 }
 
-void setServoAngle(uint8_t servo_number, uint8_t angle) {
-  // Angle input in degrees
+// negative angle disables the servo (makes it free spinning)
+void setServoAngle(uint8_t servo_number, int16_t angle) {
+  // Angle input in degrees [0, 180]
   // servo valid count range from 500 to 2500 (0.5ms to 2.5ms)
   // 500 -  2.9V on FB pin
   // 2500 - 0.27V on FB pin
-  if (servo_number == 0) {
-    seq_values->channel_0 = 500 + (uint32_t)angle * 2000/180;
-  } else {
-    seq_values->channel_1 = 500 + (uint32_t)angle * 2000/180;
+  uint32_t pulse_width = 0;
+  if (angle > 180) {
+    angle = 180;
   }
+  if (angle >= 0) {
+    pulse_width = 500 + (uint32_t)angle * 2000/180;
+  }
+
+  if (servo_number == 0) {
+    seq_values->channel_0 = pulse_width;
+  } else {
+    seq_values->channel_1 = pulse_width;
+  }
+
   nrf_drv_pwm_simple_playback(&m_pwm0, &seq, 1, NRF_DRV_PWM_FLAG_LOOP);
+}
+
+// Feedback pin voltage to servo angle
+uint8_t fbVoltToAngle(float voltage) {
+  // 0.23 to 180 deg, 3 to 0 deg
+  const float lowerV = 0.27;
+  const float upperV = 3;
+  if (voltage < lowerV) {
+    voltage = lowerV;
+  }
+  if (voltage > upperV) {
+    voltage = upperV;
+  }
+  return (uint8_t)(180.0 - 180.0*(voltage - lowerV)/(upperV - lowerV));
 }
 
 // callback for SAADC events

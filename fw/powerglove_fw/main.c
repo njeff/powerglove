@@ -42,7 +42,7 @@ int main(void) {
 
   // initialize servo
   servoInit();
-  setServoAngle(0, 90);
+  setServoAngle(0, -1);
 
   // initialize ADC reading for battery and servo FB
   adcInit();
@@ -101,6 +101,7 @@ int main(void) {
   state = OFF;
   pStateFunc = state_map[state];
   state_data_t state_info;
+  state_info.cal = 0;
 
   char buf[16];
   while (1) {
@@ -113,9 +114,6 @@ int main(void) {
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    // debug prints
-    sprintf(buf, "ms: %lu, %2.1f", millis(), readServoFB());
-    display_write(buf, DISPLAY_LINE_1);
     nrf_delay_ms(100);
   }
 }
