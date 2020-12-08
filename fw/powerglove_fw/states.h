@@ -9,7 +9,7 @@ typedef enum {
   OFF,
   CALIBRATION,
   ACTIVE,
-  SHUTTING_DOWN,
+  SLEEP,
 } glove_state_t;
 
 typedef struct s_data {
@@ -24,7 +24,7 @@ typedef struct s_data {
 glove_state_t off_state(state_data_t *state_data);
 glove_state_t calibration_state(state_data_t *state_data);
 glove_state_t active_state(state_data_t *state_data);
-glove_state_t shutting_down_state(state_data_t *state_data);
+glove_state_t sleep_state(state_data_t *state_data);
 
 extern glove_state_t (*state_map[])(state_data_t *);
 

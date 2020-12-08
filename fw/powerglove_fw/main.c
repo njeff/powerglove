@@ -20,6 +20,7 @@
 #include "app_timer.h"
 
 #include "buckler.h"
+#include "lsm9ds1.h"
 #include "drv2605l.h"
 #include "vl53l0x.h"
 #include "millis.h"
@@ -89,19 +90,28 @@ int main(void) {
     APP_ERROR_CHECK(error_code);
   }
 
+  // init imu
+  lsm9ds1_init(&twi_mngr_instance);
+  printf("lsm9ds1 initialized\n");
+
   // init haptic
   initDRV2605(&twi_mngr_instance);
+  printf("drv2605 initialized\n");
 
   // try ToF
   VL53L0X_init(true, &twi_mngr_instance);
+  printf("tof initialized\n");
   VL53L0X_startContinuous(100);
-  
 
   // loop forever
   state = OFF;
   pStateFunc = state_map[state];
   state_data_t state_info;
   state_info.cal = 0;
+  // debugging; start off calibrated
+  state_info.cal = 2;
+  state_info.lower_angle = 45;
+  state_info.upper_angle = 135;
 
   char buf[16];
   while (1) {
