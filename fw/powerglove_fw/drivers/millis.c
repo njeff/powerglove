@@ -38,6 +38,6 @@ uint32_t millis(void)
 
 uint32_t compareMillis(uint32_t previousMillis, uint32_t currentMillis)
 {
-  if(currentMillis < previousMillis) return(currentMillis + OVERFLOW + 1 - previousMillis);
+  if(currentMillis < previousMillis) return(currentMillis + OVERFLOW_MS + 1 - previousMillis);
   return(currentMillis - previousMillis);
 }

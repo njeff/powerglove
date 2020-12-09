@@ -151,18 +151,27 @@ void buttonInit() {
 static uint32_t last_press_time = 0;
 static bool down = false;
 
-bool readButton() {
-  // returns true if the button was pressed on this cycle
-  // if held down, will return false on next cycles
+bool readButton(uint32_t *hold_duration) {
+  // returns true if the button was just *released* on this cycle
   // implements debouncing
-  if (compareMillis(last_press_time, millis()) > 100) {
+  uint32_t hold_time = compareMillis(last_press_time, millis());
+  // if just pressed/released ignore all transitions for the next 100ms
+  if (hold_time > 100) {
     if (!nrf_gpio_pin_read(BUCKLER_BUTTON0)) {
+      // if button is down, and not already down
       if (!down) {
+        // record the start time
         last_press_time = millis();
         down = true;
+      }
+      return false;
+    } else {
+      if (down) {
+        *hold_duration = hold_time;
+        last_press_time = millis();
+        down = false;
         return true;
       }
-    } else {
       down = false;
     }
   }

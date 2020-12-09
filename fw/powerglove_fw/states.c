@@ -15,7 +15,8 @@ glove_state_t (*state_map[])(state_data_t *) = {
   off_state,
   calibration_state,
   active_state,
-  sleep_state
+  sleep_state,
+  lp_active_state
 };
 
 static char buf[16];
@@ -29,7 +30,12 @@ glove_state_t off_state(state_data_t *state_data) {
     if (state_data->cal == 0) {
       return CALIBRATION;
     } else {
-      return ACTIVE;
+      // if held down for > 1 sec, go to lower power active
+      if (state_data->hold_time > 1000) {
+        return LOW_POWER_ACTIVE;
+      } else {
+        return ACTIVE;
+      }
     }
   }
   return OFF;
@@ -137,4 +143,33 @@ glove_state_t sleep_state(state_data_t *state_data) {
   }
 
   return SLEEP;
+}
+
+glove_state_t lp_active_state(state_data_t *state_data) {
+  display_write("Low Power Mode", DISPLAY_LINE_0);
+  
+  if (state_data->pressed) {
+    return OFF;
+  }
+
+  const int lowerDist = 50;
+  const int upperDist = 500;
+
+  // clamp
+  int d = fmin(fmax(state_data->dist, lowerDist), upperDist);
+  int levels = (d - lowerDist) * 8 / (upperDist - lowerDist);
+  sprintf(buf, "lvl: %d", levels);
+  display_write(buf, DISPLAY_LINE_1);
+
+  if (levels < 2) {
+    DRV2605_setWaveform(0, 1); // 100% strong click
+  } else if (levels < 6) {
+    DRV2605_setWaveform(0, 2); // 60% strong click
+  } else {
+    DRV2605_setWaveform(0, 3); // 30% strong click
+  }
+  DRV2605_setWaveform(1, 0);
+  DRV2605_go();
+
+  return LOW_POWER_ACTIVE;
 }

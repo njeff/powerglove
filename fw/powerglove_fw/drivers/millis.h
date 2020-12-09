@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define OVERFLOW ((uint32_t)(0xFFFFFFFF/32.768))
+#define OVERFLOW_MS ((uint32_t)(0xFFFFFFFF/32.768))
 #define APP_TIMER_PRESCALER
 
 uint32_t millis(void);

@@ -118,13 +118,13 @@ int main(void) {
     // update all state variables
     state_info.dist = VL53L0X_readRangeContinuousMillimeters();
     state_info.voltage = readBattery();
-    state_info.pressed = readButton();
+    state_info.pressed = readButton(&state_info.hold_time);
     
     // do state functions
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    nrf_delay_ms(100);
+    nrf_delay_ms(50);
   }
 }
 

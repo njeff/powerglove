@@ -16,6 +16,6 @@ void adcInit();
 float readBattery();
 float readServoFB();
 void buttonInit();
-bool readButton();
+bool readButton(uint32_t *hold_duration);
 
 #endif
