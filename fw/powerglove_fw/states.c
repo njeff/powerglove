@@ -48,9 +48,9 @@ glove_state_t calibration_state(state_data_t *state_data) {
 
   uint8_t angle = fbVoltToAngle(readServoFB());
   if (state_data->cal == 0) {
-    sprintf(buf, "Lower Ang, %d", angle);
+    sprintf(buf, "Close Ang, %d", angle);
   } else if (state_data->cal == 1) {
-    sprintf(buf, "Upper Ang, %d", angle);
+    sprintf(buf, "Far Ang, %d", angle);
   }
   
   display_write(buf, DISPLAY_LINE_1);

@@ -101,17 +101,20 @@ int main(void) {
   // try ToF
   VL53L0X_init(true, &twi_mngr_instance);
   printf("tof initialized\n");
-  VL53L0X_startContinuous(100);
+  VL53L0X_startContinuous(0); // measure as fast as possible
 
   // loop forever
   state = OFF;
   pStateFunc = state_map[state];
   state_data_t state_info;
   state_info.cal = 0;
+
   // debugging; start off calibrated
+  /*
   state_info.cal = 2;
-  state_info.lower_angle = 45;
+  state_info.lower_angle = 65;
   state_info.upper_angle = 135;
+  */
 
   char buf[16];
   while (1) {
@@ -124,7 +127,7 @@ int main(void) {
     state = pStateFunc(&state_info);
     pStateFunc = state_map[state];
 
-    nrf_delay_ms(50);
+    //nrf_delay_ms(50);
   }
 }
 
