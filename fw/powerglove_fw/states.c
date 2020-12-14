@@ -34,7 +34,12 @@ glove_state_t off_state(state_data_t *state_data) {
       if (state_data->hold_time > 1000) {
         return LOW_POWER_ACTIVE;
       } else {
-        return ACTIVE;
+        if (state_data->voltage > 7) {
+          return ACTIVE;
+        } else {
+          display_write("Low battery!", DISPLAY_LINE_1);
+          nrf_delay_ms(1000);
+        }
       }
     }
   }
@@ -99,6 +104,12 @@ glove_state_t active_state(state_data_t *state_data) {
   }
 
   if (state_data->pressed) {
+    return OFF;
+  }
+
+  if (state_data->voltage < 7) {
+    display_write("Low battery!", DISPLAY_LINE_1);
+    nrf_delay_ms(1000);
     return OFF;
   }
 
